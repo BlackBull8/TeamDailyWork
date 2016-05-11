@@ -171,7 +171,7 @@
                         <TextBlock FontSize="22"  Foreground="#C7251F" Text="{Binding DateString,StringFormat='yyyy年MM月dd日'}" HorizontalAlignment="Left" Margin="30,30,0,3"></TextBlock>
                         <TextBlock FontSize="22"  Foreground="#C7251F" Text="{Binding EndDateString,StringFormat='-MM月dd日'}" HorizontalAlignment="Left" Margin="0,30,10,3"></TextBlock>
                     </StackPanel>
-                  
+
                     <Button Width="30" Height="30" Margin="0,30,30,3" Grid.Column="1" BorderThickness="0" Background="Transparent" Style="{StaticResource PreNextDayButtonStyle}" x:Name="PreBtn" Command="{Binding PreCommand}"></Button>
 
                     <Button Width="30" Height="30" Margin="0,30,50,3" Grid.Column="2"  BorderThickness="0" Background="Transparent" Style="{StaticResource PreNextDayButtonStyle}" RenderTransformOrigin="0.5,0.5" x:Name="NextBtn" Command="{Binding NextCommand}" CommandParameter="1">
@@ -180,12 +180,7 @@
                         </Button.RenderTransform>
                     </Button>
                 </Grid>
-
-                <!--Frame容器添加Page页-->
-                <!--<ScrollViewer x:Name="Scroller" PanningMode="Both" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                      ManipulationBoundaryFeedback="ScrollViewer_ManipulationBoundaryFeedback" Grid.Row="1" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">-->
-                    <Frame x:Name="PageContainer" Source="Pages/DailyViewPage.xaml" Grid.Row="1"></Frame>
-                <!--</ScrollViewer>-->
+                <Frame x:Name="PageContainer" Source="Pages/DailyViewPage.xaml" Grid.Row="1"></Frame>
             </Grid>
         </Grid>
     </Grid>

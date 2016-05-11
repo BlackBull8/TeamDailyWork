@@ -31,7 +31,6 @@ namespace TeamDailyWork
         }
 
         private readonly MainWindowViewModel _mainWindowViewModel= MainWindowViewModel.GetInstance();
-        //private DailyViewPageViewModel _dailyViewPageViewModel = new DailyViewPageViewModel(DateTime.Today);
         private bool _colorSetting;
         private bool _isCheck;
         private void Window_Loaded(object sender, RoutedEventArgs e)
