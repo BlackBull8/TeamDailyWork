@@ -22,6 +22,7 @@ bld/
 [Oo]bj/
 *.sln
 *.csproj
+*.DotSettings
 
 # Visual Studio 2015 cache/options directory
 .vs/
