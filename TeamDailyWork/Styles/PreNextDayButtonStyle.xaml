@@ -1,0 +1,26 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="PreNextDayButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"  SnapsToDevicePixels="true" Background="{TemplateBinding Background}">
+                        <Path x:Name="path" Data="M942.317331 82.951896c-19.682078-19.532723-39.621946-38.806633-59.332667-58.30969C753.313119 156.165339 625.915652 289.980963 496.299349 421.557291 367.314222 289.683277 238.962318 157.17604 110.637011 24.642206c-21.140843 18.073958-39.141147 39.28641-60.355644 57.286713C197.743504 236.589746 347.705798 388.735073 496.299349 542.268579 645.193654 389.388755 793.833239 236.240911 942.317331 82.951896z"  Fill="Black"  HorizontalAlignment="Left" Height="15" Width="18" Stretch="Fill" VerticalAlignment="Center"  RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <RotateTransform Angle="90"></RotateTransform>
+                            </Path.RenderTransform>
+                        </Path>
+                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Grid>
+
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Fill" TargetName="path" Value="Gray"></Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
