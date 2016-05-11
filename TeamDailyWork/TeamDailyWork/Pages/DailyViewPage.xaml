@@ -1,0 +1,36 @@
+﻿<Page x:Class="TeamDailyWork.Pages.DailyViewPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:userControls="clr-namespace:TeamDailyWork.UserControls"
+      xmlns:models="clr-namespace:TeamDailyWork.Models"
+      xmlns:converters="clr-namespace:TeamDailyWork.Converters"
+      mc:Ignorable="d"  ShowsNavigationUI="False" WindowTitle="今日记录" SnapsToDevicePixels="True" Foreground="WhiteSmoke" Loaded="Page_Loaded">
+    <Page.Resources>
+        <converters:TimeSpanToDateTimeConverter x:Key="TimeSpanToDateTimeConverter"></converters:TimeSpanToDateTimeConverter>
+    </Page.Resources>
+    <ScrollViewer x:Name="Scroller" PanningMode="Both"  VerticalScrollBarVisibility="Auto"
+                      ManipulationBoundaryFeedback="ScrollViewer_ManipulationBoundaryFeedback" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ItemsControl x:Name="WorkCellList" ItemsSource="{x:Static models:TimeCellItem.OneDay}" Grid.Column="0" >
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:TimeCellItem}">
+                    <Grid>
+                        <Border BorderThickness="0,1,1,0" BorderBrush="#808080" Grid.Column="0" Height="60">
+                            <TextBlock Text="{Binding Path=Time,Converter={StaticResource TimeSpanToDateTimeConverter}}" FontSize="14" Foreground="Black" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,20"></TextBlock>
+                        </Border>
+
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <userControls:DailyViewUserControl Grid.Column="1"></userControls:DailyViewUserControl>
+    </Grid>
+    </ScrollViewer>
+</Page>
