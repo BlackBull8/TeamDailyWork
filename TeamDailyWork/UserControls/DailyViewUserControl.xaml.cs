@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TeamDailyWork.Controls;
 using TeamDailyWork.Models;
@@ -143,7 +135,7 @@ namespace TeamDailyWork.UserControls
             }
             TbTimeShow.Text = _startTime.ToString("HH:mm") + " - " + _endTime.ToString("HH:mm");
             AddWorkPopUpSingle.IsOpen = true;
-            Console.WriteLine("开始时间：" + e.StartTime + ",结束时间：" + e.EndTime);
+            //Console.WriteLine("开始时间：" + e.StartTime + ",结束时间：" + e.EndTime);
         }
 
         #endregion
@@ -236,16 +228,16 @@ namespace TeamDailyWork.UserControls
                 tbResultOpacity.To = 0;
                 Duration duration = new Duration(TimeSpan.FromMilliseconds(5000));
                 tbResultOpacity.Duration = duration;
-                this.TbErrorMessage.BeginAnimation(TextBox.OpacityProperty, tbResultOpacity);
+                TbErrorMessage.BeginAnimation(TextBox.OpacityProperty, tbResultOpacity);
 
             }
             else
             {
-                String date = _workItem.StartTime.ToString("yyyy-MM-dd") + " ";
-                _workItem.Title = CbStartTime.SelectedValue.ToString() + "-" + CbEndTime.SelectedValue.ToString();
+                string date = _workItem.StartTime.ToString("yyyy-MM-dd") + " ";
+                _workItem.Title = CbStartTime.SelectedValue + "-" + CbEndTime.SelectedValue;
                 _workItem.Content = TbContentShowEdit.Text;
-                _workItem.StartTime = DateTime.Parse(date + CbStartTime.SelectedValue.ToString());
-                _workItem.EndTime = DateTime.Parse(date + CbEndTime.SelectedValue.ToString());
+                _workItem.StartTime = DateTime.Parse(date + CbStartTime.SelectedValue);
+                _workItem.EndTime = DateTime.Parse(date + CbEndTime.SelectedValue);
                 _workItem.Type = (WorkClassification)TypeToColorListEdit.SelectedItem;
                 EditWorkPopUp.IsOpen = false;
                 _dailyViewPageViewModel.UpdateWorkItem(_workItem);
@@ -277,7 +269,25 @@ namespace TeamDailyWork.UserControls
             if (MessageBox.Show("确认删除吗?", "提示", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
                 WorkItem deleteWorkItem = (WorkItem)(((Button)sender).Tag);
-                _dailyViewPageViewModel.DeleteWorkItem(deleteWorkItem);
+                //todo:利用id查出WorkItem的具体日期，并在字典中查找
+                WorkItem workItem = _dailyViewPageViewModel.QueryDeletingWorkItem(deleteWorkItem.Id);
+                if (workItem != null)
+                {
+                    for (DateTime dt = workItem.StartTime.Date; dt <= workItem.EndTime.Date;)
+                    {
+                        (DateUserControlDict[dt].DataContext as DailyViewPageViewModel)?.DeleteWorkItem(deleteWorkItem);
+                        for (int i = 0; i < (DateUserControlDict[dt].DataContext as DailyViewPageViewModel) ?.WorkItems.Count; i++)
+                        {
+                            if ((DateUserControlDict[dt].DataContext as DailyViewPageViewModel)?.WorkItems[i].Id ==
+                                workItem.Id)
+                            {
+                                (DateUserControlDict[dt].DataContext as DailyViewPageViewModel)?.WorkItems.RemoveAt(i);
+                            }
+                        }
+                        dt = dt.AddDays(1);
+                    }
+                }
+                _dailyViewPageViewModel.DeleteWorkItem(workItem);
             }
         }
         #endregion
@@ -299,18 +309,6 @@ namespace TeamDailyWork.UserControls
 
         private void GenerateAsBtnMulti_Click(object sender, RoutedEventArgs e)
         {
-            //主要思路：
-            //1、根据开始时间和结束时间，进行时间判断，找出对应的DailyViewUserControl，再找到对应的DailyViewPageViewModel
-            //2、根据开始时间和结束时间，生成对应的WorkItem，根据日期分开存放，然后再添加进每个DailyViewPageViewModel的WorkItems的属性中
-            //3、数据库方面的事情
-            //for (DateTime tempDate = _startTime.Date; tempDate <= _endTime.Date; tempDate = tempDate.AddDays(1))
-            //{
-            //    if (tempDate == _startTime.Date)
-            //    {
-            //        WorkItem workItem=new WorkItem();
-            //    }
-            //}
-
             WorkItem workItem = new WorkItem(Guid.NewGuid(), _startTime, _endTime, _startTime.ToString("HH:mm") + "-" + _endTime.ToString("HH:mm"), TbContentShowMulti.Text, ((WorkClassification)TypeToColorListMulti.SelectedItem)); _dailyViewPageViewModel?.AddWorkItem(workItem);
             AddWorkPopUpMulti.IsOpen = false;
             BlockCover.Visibility = Visibility.Hidden;

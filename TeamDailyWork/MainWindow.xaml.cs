@@ -89,7 +89,7 @@ namespace TeamDailyWork
             tbResultOpacity.Duration = duration;
             this.TbResult.BeginAnimation(TextBox.OpacityProperty, tbResultOpacity);
 
-            CbColor.SelectedIndex = -1;
+            ColorsListOne.SelectedIndex = -1;
         }
         #endregion
 

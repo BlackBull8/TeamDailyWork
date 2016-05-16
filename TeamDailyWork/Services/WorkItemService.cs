@@ -99,5 +99,36 @@ namespace TeamDailyWork.Services
             }
 
         }
+
+        /// <summary>
+        /// 判断WorkItem是否存在
+        /// </summary>
+        /// <param name="workItem"></param>
+        /// <returns></returns>
+        public int IsExist(WorkItem workItem)
+        {
+            string sqlStr = "select count(*) from WorkItems where Id=@id";
+            SqlParameter[] parameters = { new SqlParameter("@id", workItem.Id) };
+            int result = (int)SqlHelper.ExecuteScalar(sqlStr, CommandType.Text, parameters);
+            return result;            
+        }
+
+
+        /// <summary>
+        /// 返回单个WorkItem
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public DataTable GetSingleWorkItem(Guid id)
+        {
+            string sqlStr =
+               "Select Id,Title,Content,StartTime,EndTime,Type from WorkItems where Id=@id";
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@id", id),
+            };
+            DataTable dt = SqlHelper.ExecuteDataTable(sqlStr, CommandType.Text, parameters);
+            return dt;
+        }
     }
 }

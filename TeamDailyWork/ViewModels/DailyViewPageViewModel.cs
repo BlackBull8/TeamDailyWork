@@ -14,7 +14,6 @@ namespace TeamDailyWork.ViewModels
     {
         //执行Sql的对象
         private readonly WorkItemService _workItemService = new WorkItemService();
-
         #region 属性
         private DateTime _dateString;
         public DateTime DateString
@@ -139,7 +138,7 @@ namespace TeamDailyWork.ViewModels
         public void LoadWorkItemInSelectedDate(DateTime dateString)
         {
             DataTable dt = _workItemService.GetSelectedDateWorkItems(dateString);
-            WorkItems = DataTableToWorkItemList(dt);
+            WorkItems = DataTableToWorkItemList(dt,false);
         }
 
 
@@ -150,7 +149,7 @@ namespace TeamDailyWork.ViewModels
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
-        private ObservableCollection<WorkItem> DataTableToWorkItemList(DataTable dt)
+        private ObservableCollection<WorkItem> DataTableToWorkItemList(DataTable dt,bool isSingle)
         {
             ObservableCollection<WorkItem> resultList = new ObservableCollection<WorkItem>();
             if (dt.Rows.Count > 0)
@@ -165,22 +164,31 @@ namespace TeamDailyWork.ViewModels
                         workItem.Title = dr["Title"].ToString();
                         workItem.Content = dr["Content"].ToString();
                         workItem.Type = MainWindowViewModel.WorkClassification[(Guid)dr["Type"]];
-                        if (DateTime.Parse(dr["StartTime"].ToString()).Date == DateString.Date)
+                        if (!isSingle)
+                        {
+                            if (DateTime.Parse(dr["StartTime"].ToString()).Date == DateString.Date)
+                            {
+                                workItem.StartTime = DateTime.Parse(dr["StartTime"].ToString());
+                            }
+                            else if (DateTime.Parse(dr["StartTime"].ToString()).Date < DateString.Date)
+                            {
+                                workItem.StartTime = DateString;
+                            }
+
+                            if (DateTime.Parse(dr["EndTime"].ToString()).Date == DateString.Date ||
+                                DateTime.Parse(dr["EndTime"].ToString()) == DateString.AddDays(1))
+                            {
+                                workItem.EndTime = DateTime.Parse(dr["EndTime"].ToString());
+                            }
+                            else if (DateTime.Parse(dr["EndTime"].ToString()).Date > DateString.Date)
+                            {
+                                workItem.EndTime = DateString.AddDays(1);
+                            }
+                        }
+                        else
                         {
                             workItem.StartTime = DateTime.Parse(dr["StartTime"].ToString());
-                        }
-                        else if (DateTime.Parse(dr["StartTime"].ToString()).Date < DateString.Date)
-                        {
-                            workItem.StartTime = DateString;
-                        }
-
-                        if (DateTime.Parse(dr["EndTime"].ToString()).Date == DateString.Date || DateTime.Parse(dr["EndTime"].ToString()) == DateString.AddDays(1))
-                        {
                             workItem.EndTime = DateTime.Parse(dr["EndTime"].ToString());
-                        }
-                        else if(DateTime.Parse(dr["EndTime"].ToString()).Date>DateString.Date)
-                        {
-                            workItem.EndTime = DateString.AddDays(1);
                         }
                     }
                     resultList.Add(workItem);
@@ -196,9 +204,28 @@ namespace TeamDailyWork.ViewModels
         /// <param name="workItem"></param>
         public void DeleteWorkItem(WorkItem workItem)
         {
-            WorkItems.Remove(workItem);
-            _workItemService.Delete(workItem);
+            if (_workItemService.IsExist(workItem) == 1)
+            {
+                _workItemService.Delete(workItem);
+            }
+
         }
+
+
+        public WorkItem QueryDeletingWorkItem(Guid id)
+        {
+            DataTable dt = _workItemService.GetSingleWorkItem(id);
+            ObservableCollection<WorkItem> workItems = DataTableToWorkItemList(dt, true);
+            if (workItems.Count == 1)
+            {
+                return workItems[0];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         #endregion
     }
 }
