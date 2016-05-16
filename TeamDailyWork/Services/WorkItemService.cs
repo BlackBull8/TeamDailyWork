@@ -43,10 +43,12 @@ namespace TeamDailyWork.Services
         /// <returns></returns>
         public DataTable GetSelectedDateWorkItems(DateTime selectedDate)
         {
-            DateTime startTime = selectedDate;
-            DateTime endTime = selectedDate.AddDays(1);
+            DateTime startTime = selectedDate.AddHours(23.5);
+            DateTime endTime = selectedDate;
+            //string sqlStr =
+            //    "Select Id,Title,Content,StartTime,EndTime,Type from WorkItems where StartTime >=@startTime and EndTime <= @endTime";
             string sqlStr =
-                "Select Id,Title,Content,StartTime,EndTime,Type from WorkItems where StartTime >=@startTime and EndTime <= @endTime";
+               "Select Id,Title,Content,StartTime,EndTime,Type from WorkItems where StartTime <=@startTime and EndTime >= @endTime";
             SqlParameter[] parameters =
             {
                 new SqlParameter("@startTime", startTime),

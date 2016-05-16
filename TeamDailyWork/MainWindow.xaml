@@ -69,8 +69,8 @@
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.78*"></ColumnDefinition>
-                <ColumnDefinition Width="0.21*"></ColumnDefinition>
+                <ColumnDefinition Width="0.76*"></ColumnDefinition>
+                <ColumnDefinition Width="0.24*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
             <StackPanel Background="#E5E5E5">
@@ -125,11 +125,11 @@
                             </Grid.RowDefinitions>
                                 <StackPanel Orientation="Horizontal" Margin="0,20,0,0" Grid.Row="0" HorizontalAlignment="Center">
                                     <TextBlock x:Name="TbTypeOne" Text="类别:"  FontSize="16" VerticalAlignment="Center"></TextBlock>
-                                    <ComboBox x:Name="CbColor" Width="130" DisplayMemberPath="Type" SelectedValuePath="Id" Height="30" ItemsSource="{Binding WorkClassifications.Values,IsAsync=True}" Margin="10,0,0,0" VerticalAlignment="Center" IsEditable="True" FontSize="14" VerticalContentAlignment="Center"></ComboBox>
+                                    <ComboBox x:Name="CbColor" Width="130" DisplayMemberPath="Type" SelectedValuePath="Id" Height="30" ItemsSource="{Binding WorkClassification.Values,IsAsync=True}" Margin="10,0,0,0" VerticalAlignment="Center" IsEditable="True" FontSize="14" VerticalContentAlignment="Center"></ComboBox>
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="0,10,0,0" HorizontalAlignment="Center" Grid.Row="1">
                                     <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
-                                        <ListBox BorderThickness="0" x:Name="ColorsListOne"  Margin="10,10,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="270" ItemsSource="{Binding ListColor}"  Style="{StaticResource ColorListBoxStyleChoose}"  Background="#E5E5E5"></ListBox>
+                                        <ListBox BorderThickness="0" x:Name="ColorsListOne"  Margin="10,10,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="270"  Style="{StaticResource ColorListBoxStyleChoose}"  Background="#E5E5E5"></ListBox>
                                     </ScrollViewer>
                                     <Button Content="Apply" Width="80" Height="30" x:Name="ApplyBtn" HorizontalAlignment="Left" Margin="15,0,0,0" Click="ApplyBtn_Click" BorderThickness="1" Style="{StaticResource ExpanderButtonStyle}">
                                         <Button.IsEnabled>

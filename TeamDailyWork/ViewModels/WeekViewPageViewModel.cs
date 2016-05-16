@@ -14,6 +14,7 @@ namespace TeamDailyWork.ViewModels
     public class WeekViewPageViewModel:NotificationObject
     {
         private DateTime _tempDateTime;
+
         #region 属性
         private DateTime _dateString;
         public DateTime DateString

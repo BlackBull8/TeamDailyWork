@@ -14,6 +14,35 @@ namespace TeamDailyWork.ViewModels
         //new出给外部使用的对象
         private static readonly MainWindowViewModel _mainWindowViewModel = new MainWindowViewModel();
 
+        #region 关于颜色与类型设置的属性
+        private Dictionary<Guid, WorkClassification> _workClassification;
+
+        public Dictionary<Guid, WorkClassification> WorkClassification
+        {
+            get { return _workClassification; }
+            set
+            {
+                _workClassification = value;
+                this.OnPropertyChanged(nameof(WorkClassification));
+            }
+        }
+
+
+        private ObservableCollection<WorkClassification> _workClassificationList;
+        public ObservableCollection<WorkClassification> WorkClassificationList
+        {
+            get { return _workClassificationList; }
+            set
+            {
+                _workClassificationList = value;
+                this.OnPropertyChanged(nameof(WorkClassificationList));
+            }
+        }
+
+        #endregion
+
+
+
         /// <summary>
         /// 暴露给外面的方法去获取该对象
         /// </summary>
@@ -37,42 +66,17 @@ namespace TeamDailyWork.ViewModels
         /// </summary>
         private void LoadWorkClassification()
         {
-            WorkClassifications = new Dictionary<Guid, WorkClassification>();
+            WorkClassification = new Dictionary<Guid, WorkClassification>();
             WorkClassificationList = new ObservableCollection<WorkClassification>();
             WorkClassificationList = new XmlService().ReadFromXml();
             foreach (WorkClassification item in WorkClassificationList)
             {
-                WorkClassifications.Add(item.Id, item);
+                WorkClassification.Add(item.Id, item);
             }
         }
 
 
-        #region 关于颜色与类型设置的属性
-        private Dictionary<Guid, WorkClassification> _workClassifications;
-
-        public Dictionary<Guid, WorkClassification> WorkClassifications
-        {
-            get { return _workClassifications; }
-            set
-            {
-                _workClassifications = value;
-                this.OnPropertyChanged(nameof(WorkClassifications));
-            }
-        }
-
-
-        private ObservableCollection<WorkClassification> _workClassificationList;
-        public ObservableCollection<WorkClassification> WorkClassificationList
-        {
-            get { return _workClassificationList; }
-            set
-            {
-                _workClassificationList = value;
-                this.OnPropertyChanged(nameof(WorkClassificationList));
-            }
-        }
-
-        #endregion
+       
 
         #region 序列化颜色与类型的设置
         /// <summary>

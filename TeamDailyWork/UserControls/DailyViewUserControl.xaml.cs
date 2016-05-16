@@ -156,12 +156,7 @@ namespace TeamDailyWork.UserControls
         /// <param name="e"></param>
         private void GenerateAsBtn_Click(object sender, RoutedEventArgs e)
         {
-            WorkItem workItem = new WorkItem(Guid.NewGuid(), _startTime, _endTime, _startTime.ToString("HH:mm") + "-" + _endTime.ToString("HH:mm"), TbContentShow.Text, ((WorkClassification)TypeToColorList.SelectedItem));
-
-            if (_dailyViewPageViewModel != null)
-            {
-                _dailyViewPageViewModel.AddWorkItem(workItem);
-            }
+            WorkItem workItem = new WorkItem(Guid.NewGuid(), _startTime, _endTime, _startTime.ToString("HH:mm") + "-" + _endTime.ToString("HH:mm"), TbContentShow.Text, ((WorkClassification)TypeToColorList.SelectedItem)); _dailyViewPageViewModel?.AddWorkItem(workItem);
             AddWorkPopUpSingle.IsOpen = false;
             BlockCover.Visibility = Visibility.Hidden;
             TbContentShow.Text = "";
@@ -308,13 +303,19 @@ namespace TeamDailyWork.UserControls
             //1、根据开始时间和结束时间，进行时间判断，找出对应的DailyViewUserControl，再找到对应的DailyViewPageViewModel
             //2、根据开始时间和结束时间，生成对应的WorkItem，根据日期分开存放，然后再添加进每个DailyViewPageViewModel的WorkItems的属性中
             //3、数据库方面的事情
-            for (DateTime tempDate = _startTime.Date; tempDate <= _endTime.Date; tempDate = tempDate.AddDays(1))
-            {
-                if (tempDate == _startTime.Date)
-                {
-                    WorkItem workItem=new WorkItem();
-                }
-            }
+            //for (DateTime tempDate = _startTime.Date; tempDate <= _endTime.Date; tempDate = tempDate.AddDays(1))
+            //{
+            //    if (tempDate == _startTime.Date)
+            //    {
+            //        WorkItem workItem=new WorkItem();
+            //    }
+            //}
+
+            WorkItem workItem = new WorkItem(Guid.NewGuid(), _startTime, _endTime, _startTime.ToString("HH:mm") + "-" + _endTime.ToString("HH:mm"), TbContentShowMulti.Text, ((WorkClassification)TypeToColorListMulti.SelectedItem)); _dailyViewPageViewModel?.AddWorkItem(workItem);
+            AddWorkPopUpMulti.IsOpen = false;
+            BlockCover.Visibility = Visibility.Hidden;
+            TbContentShowMulti.Text = "";
+            TypeToColorListMulti.SelectedIndex = -1;
         }
     }
 }

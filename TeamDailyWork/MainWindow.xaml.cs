@@ -30,14 +30,14 @@ namespace TeamDailyWork
             InitializeComponent();
         }
 
-        private readonly MainWindowViewModel _mainWindowViewModel= MainWindowViewModel.GetInstance();
+        private readonly MainWindowViewModel _mainWindowViewModel = MainWindowViewModel.GetInstance();
         private bool _colorSetting;
         private bool _isCheck;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.DataContext = _mainWindowViewModel;
-           
-            this.ShowPageGrid.DataContext = new DailyViewPageViewModel(DateTime.Today);               
+
+            this.ShowPageGrid.DataContext = new DailyViewPageViewModel(DateTime.Today);
             ColorsListOne.ItemsSource = new List<Color>()
             {
                 Color.FromRgb(221, 222, 224),
@@ -61,49 +61,35 @@ namespace TeamDailyWork
         /// <param name="e"></param>
         private void ApplyBtn_Click(object sender, RoutedEventArgs e)
         {
-            //因为在XAML中已经使用绑定，所以此处就不用进行判断是否有选择
-            //try
-            //{
-                Color color = (Color) ColorsListOne.SelectedValue;
-                if (CbColor.SelectedValue != null)
-                {
-                    //修改
-                    WorkClassification workClassificationItem =
-                        _mainWindowViewModel.WorkClassifications[(Guid) CbColor.SelectedValue];
-                    workClassificationItem.Color = color;
-                }
-                else
-                {
-                    //添加
-                    Guid id = Guid.NewGuid();
-                    WorkClassification workClassificationItem = new WorkClassification(id, CbColor.Text, color);
-                    _mainWindowViewModel.WorkClassifications.Add(id, workClassificationItem);
-                    _mainWindowViewModel.WorkClassificationList.Add(workClassificationItem);
-                }
-                _colorSetting = true;
+            Color color = (Color)ColorsListOne.SelectedValue;
+            if (CbColor.SelectedValue != null)
+            {
+                //修改
+                WorkClassification workClassificationItem =
+                    _mainWindowViewModel.WorkClassification[(Guid)CbColor.SelectedValue];
+                workClassificationItem.Color = color;
+            }
+            else
+            {
+                //添加
+                Guid id = Guid.NewGuid();
+                WorkClassification workClassificationItem = new WorkClassification(id, CbColor.Text, color);
+                _mainWindowViewModel.WorkClassification.Add(id, workClassificationItem);
+                _mainWindowViewModel.WorkClassificationList.Add(workClassificationItem);
+            }
+            _colorSetting = true;
 
-                TbResult.Text = "设置成功...";
-                TbResult.Foreground = new SolidColorBrush(Colors.Black);
-                DoubleAnimation tbResultOpacity = new DoubleAnimation();
-                tbResultOpacity.From = 0;
-                tbResultOpacity.To = 1;
-                tbResultOpacity.AutoReverse = true;
-                Duration duration = new Duration(TimeSpan.FromMilliseconds(1500));
-                tbResultOpacity.Duration = duration;
-                this.TbResult.BeginAnimation(TextBox.OpacityProperty, tbResultOpacity);
-            //}
-            //catch (Exception ex)
-            //{
-            //    TbResult.Text = "设置失败...";
-            //    TbResult.Foreground = new SolidColorBrush(Colors.Red);
-            //    TbResult.Opacity = 1;
-            //    throw;
-            //}
-            //finally
-            //{
-                CbColor.SelectedIndex = -1;
-                ColorsListOne.SelectedIndex = -1;
-            //}
+            TbResult.Text = "设置成功...";
+            TbResult.Foreground = new SolidColorBrush(Colors.Black);
+            DoubleAnimation tbResultOpacity = new DoubleAnimation();
+            tbResultOpacity.From = 0;
+            tbResultOpacity.To = 1;
+            tbResultOpacity.AutoReverse = true;
+            Duration duration = new Duration(TimeSpan.FromMilliseconds(1500));
+            tbResultOpacity.Duration = duration;
+            this.TbResult.BeginAnimation(TextBox.OpacityProperty, tbResultOpacity);
+
+            CbColor.SelectedIndex = -1;
         }
         #endregion
 
@@ -154,10 +140,10 @@ namespace TeamDailyWork
 
 
 
-        
+
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            RadioButton rb = (RadioButton) sender;
+            RadioButton rb = (RadioButton)sender;
             if (rb.Content.ToString() == "今日")
             {
                 if (_isCheck)

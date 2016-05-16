@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Threading;
+using System.Windows;
+using System.Windows.Input;
 using TeamDailyWork.Commands;
 using TeamDailyWork.Models;
 using TeamDailyWork.Services;
@@ -142,7 +144,7 @@ namespace TeamDailyWork.ViewModels
 
 
 
-        //todo:其实不该放在这里的,不是这个层面的东西。解决方案：把WorkClassifications和WorkClassificationList作为参数传递到WorkItemService类中的一个方法赋值。
+        //todo:其实不该放在这里的,不是这个层面的东西。解决方案：把WorkClassification和WorkClassificationList作为参数传递到WorkItemService类中的一个方法赋值。
         /// <summary>
         /// 从DataTable返回WorkItems列表
         /// </summary>
@@ -162,9 +164,24 @@ namespace TeamDailyWork.ViewModels
                         workItem.Id = (Guid)dr["Id"];
                         workItem.Title = dr["Title"].ToString();
                         workItem.Content = dr["Content"].ToString();
-                        workItem.StartTime = DateTime.Parse(dr["StartTime"].ToString());
-                        workItem.EndTime = DateTime.Parse(dr["EndTime"].ToString());
-                        workItem.Type = MainWindowViewModel.WorkClassifications[(Guid)dr["Type"]];
+                        workItem.Type = MainWindowViewModel.WorkClassification[(Guid)dr["Type"]];
+                        if (DateTime.Parse(dr["StartTime"].ToString()).Date == DateString.Date)
+                        {
+                            workItem.StartTime = DateTime.Parse(dr["StartTime"].ToString());
+                        }
+                        else if (DateTime.Parse(dr["StartTime"].ToString()).Date < DateString.Date)
+                        {
+                            workItem.StartTime = DateString;
+                        }
+
+                        if (DateTime.Parse(dr["EndTime"].ToString()).Date == DateString.Date || DateTime.Parse(dr["EndTime"].ToString()) == DateString.AddDays(1))
+                        {
+                            workItem.EndTime = DateTime.Parse(dr["EndTime"].ToString());
+                        }
+                        else if(DateTime.Parse(dr["EndTime"].ToString()).Date>DateString.Date)
+                        {
+                            workItem.EndTime = DateString.AddDays(1);
+                        }
                     }
                     resultList.Add(workItem);
                 }

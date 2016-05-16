@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
 using TeamDailyWork.Annotations;
 
 namespace TeamDailyWork.Models
@@ -110,6 +105,7 @@ namespace TeamDailyWork.Models
         /// <summary>
         /// 初始化开始时间和结束时间的构造函数
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         public WorkItem(Guid id, DateTime startTime, DateTime endTime)

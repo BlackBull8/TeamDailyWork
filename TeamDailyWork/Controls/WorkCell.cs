@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -136,8 +132,6 @@ namespace TeamDailyWork.Controls
             RaiseEvent(new WorkCellGotTimeEventArgs(GotTimeEvent, time1, time2));
         }
         #endregion
-
-
     }
 
     public delegate void WorkCellGetTimeHandler(object sender,WorkCellGotTimeEventArgs e);

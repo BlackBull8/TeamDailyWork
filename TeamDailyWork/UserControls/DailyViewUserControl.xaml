@@ -170,8 +170,8 @@
                                 <Button x:Name="GenerateAsBtnMulti" BorderThickness="0" Background="White" Content="创建" HorizontalContentAlignment="Left" Margin="5,5,5,5" Width="80" Height="35" FontWeight="Bold" FontSize="17" Foreground="Blue" Style="{StaticResource PopupButtonStyle}" Click="GenerateAsBtnMulti_Click">
                                     <Button.IsEnabled>
                                         <MultiBinding Converter="{StaticResource MultiValueToBoolConverter}">
-                                            <Binding ElementName="TbContentShow" Path="Text"></Binding>
-                                            <Binding ElementName="TypeToColorList" Path="SelectedValue"></Binding>
+                                            <Binding ElementName="TbContentShowMulti" Path="Text"></Binding>
+                                            <Binding ElementName="TypeToColorListMulti" Path="SelectedValue"></Binding>
                                         </MultiBinding>
                                     </Button.IsEnabled>
                                 </Button>
