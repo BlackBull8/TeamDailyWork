@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Threading;
@@ -115,9 +116,44 @@ namespace TeamDailyWork.ViewModels
         /// 添加WorkItem
         /// </summary>
         /// <param name="workItem"></param>
-        public void AddWorkItem(WorkItem workItem)
+        public void AddWorkItem(WorkItem workItem,bool isSingle)
         {
-            WorkItems.Add(workItem);
+            //if (isSingle)
+            //{
+            //    WorkItems.Add(workItem);
+            //}
+            //else
+            //{
+            //    for (DateTime dt = workItem.StartTime.Date; dt <= workItem.EndTime.Date;)
+            //    {
+            //        WorkItem item = new WorkItem();
+            //        item.Id = workItem.Id;
+            //        item.Content = workItem.Content;
+            //        item.Title = workItem.Title;
+            //        item.Type = workItem.Type;
+            //        if (dt == workItem.StartTime.Date)
+            //        {
+            //            item.StartTime = workItem.StartTime;
+            //            item.EndTime = workItem.StartTime.Date.AddDays(1);
+            //        }
+            //        else if (dt == workItem.EndTime.Date)
+            //        {
+            //            item.StartTime = workItem.EndTime.Date;
+            //            item.EndTime = workItem.EndTime;
+            //        }
+            //        else
+            //        {
+            //            item.StartTime = dt;
+            //            item.EndTime = dt.AddDays(1);
+            //        }
+                    
+            //        dt = dt.AddDays(1);
+            //    }
+            //}
+            if (isSingle)
+            {
+                WorkItems.Add(workItem);
+            }
             //存储到数据库里面(Done)
             ThreadPool.QueueUserWorkItem((item) => { _workItemService.Insert(workItem); });
         }

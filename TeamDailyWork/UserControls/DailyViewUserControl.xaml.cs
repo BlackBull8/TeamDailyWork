@@ -148,7 +148,7 @@ namespace TeamDailyWork.UserControls
         /// <param name="e"></param>
         private void GenerateAsBtn_Click(object sender, RoutedEventArgs e)
         {
-            WorkItem workItem = new WorkItem(Guid.NewGuid(), _startTime, _endTime, _startTime.ToString("HH:mm") + "-" + _endTime.ToString("HH:mm"), TbContentShow.Text, ((WorkClassification)TypeToColorList.SelectedItem)); _dailyViewPageViewModel?.AddWorkItem(workItem);
+            WorkItem workItem = new WorkItem(Guid.NewGuid(), _startTime, _endTime, _startTime.ToString("HH:mm") + "-" + _endTime.ToString("HH:mm"), TbContentShow.Text, ((WorkClassification)TypeToColorList.SelectedItem)); _dailyViewPageViewModel?.AddWorkItem(workItem,true);
             AddWorkPopUpSingle.IsOpen = false;
             BlockCover.Visibility = Visibility.Hidden;
             TbContentShow.Text = "";
@@ -309,7 +309,34 @@ namespace TeamDailyWork.UserControls
 
         private void GenerateAsBtnMulti_Click(object sender, RoutedEventArgs e)
         {
-            WorkItem workItem = new WorkItem(Guid.NewGuid(), _startTime, _endTime, _startTime.ToString("HH:mm") + "-" + _endTime.ToString("HH:mm"), TbContentShowMulti.Text, ((WorkClassification)TypeToColorListMulti.SelectedItem)); _dailyViewPageViewModel?.AddWorkItem(workItem);
+            WorkItem workItem = new WorkItem(Guid.NewGuid(), _startTime, _endTime, _startTime.ToString("HH:mm") + "-" + _endTime.ToString("HH:mm"), TbContentShowMulti.Text, ((WorkClassification)TypeToColorListMulti.SelectedItem));
+
+            for (DateTime dt = workItem.StartTime.Date; dt <= workItem.EndTime.Date;)
+            {
+                WorkItem item = new WorkItem();
+                item.Id = workItem.Id;
+                item.Content = workItem.Content;
+                item.Title = workItem.Title;
+                item.Type = workItem.Type;
+                if (dt == workItem.StartTime.Date)
+                {
+                    item.StartTime = workItem.StartTime;
+                    item.EndTime = workItem.StartTime.Date.AddDays(1);
+                }
+                else if (dt == workItem.EndTime.Date)
+                {
+                    item.StartTime = workItem.EndTime.Date;
+                    item.EndTime = workItem.EndTime;
+                }
+                else
+                {
+                    item.StartTime = dt;
+                    item.EndTime = dt.AddDays(1);
+                }
+                (DateUserControlDict[dt].DataContext as DailyViewPageViewModel)?.WorkItems.Add(item);
+                dt = dt.AddDays(1);
+            }
+            _dailyViewPageViewModel?.AddWorkItem(workItem,false);
             AddWorkPopUpMulti.IsOpen = false;
             BlockCover.Visibility = Visibility.Hidden;
             TbContentShowMulti.Text = "";
