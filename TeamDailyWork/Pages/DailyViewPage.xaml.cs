@@ -1,21 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using TeamDailyWork.Controls;
-using TeamDailyWork.Models;
-using TeamDailyWork.ViewModels;
+
 
 namespace TeamDailyWork.Pages
 {
@@ -57,17 +44,9 @@ namespace TeamDailyWork.Pages
                 return;
             }
 
-            double num = Math.Abs((int)(e.Delta / 2));
-            double offset = 0.0;
-            if (e.Delta > 0)
-            {
-                offset = Math.Max((double)0.0, (double)(viewer.VerticalOffset - num));
-            }
-            else
-            {
-                offset = Math.Min(viewer.ScrollableHeight, viewer.VerticalOffset + num);
-            }
-            if (offset != viewer.VerticalOffset)
+            double num = Math.Abs(e.Delta / 2);
+            double offset = e.Delta > 0 ? Math.Max(0.0,(viewer.VerticalOffset - num)) : Math.Min(viewer.ScrollableHeight, viewer.VerticalOffset + num);
+            if (Math.Abs(offset - viewer.VerticalOffset) > 0.00001)
             {
                 viewer.ScrollToVerticalOffset(offset);
                 e.Handled = true;
@@ -78,7 +57,7 @@ namespace TeamDailyWork.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            int count = Convert.ToInt32(System.DateTime.Now.ToString("HH"));
+            int count = Convert.ToInt32(DateTime.Now.ToString("HH"));
             //滚轴滚到目前时间段区域
             Scroller.ScrollToVerticalOffset(count * 60);
         }

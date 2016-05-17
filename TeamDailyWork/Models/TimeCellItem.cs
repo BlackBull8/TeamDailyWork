@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using TeamDailyWork.Annotations;
-using TeamDailyWork.UserControls;
 
 namespace TeamDailyWork.Models
 {
     public class TimeCellItem
     {
         //表示时间
-        public static TimeCellItem[] OneDay = new TimeCellItem[24]
-        {
+        public static TimeCellItem[] OneDay = {
             new TimeCellItem(00),
             new TimeCellItem(01),
             new TimeCellItem(02),

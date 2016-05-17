@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using TeamDailyWork.Commands;
-using TeamDailyWork.Models;
-using TeamDailyWork.Services;
 
 namespace TeamDailyWork.ViewModels
 {
@@ -23,7 +16,7 @@ namespace TeamDailyWork.ViewModels
             set
             {
                 _dateString = value;
-                this.OnPropertyChanged(nameof(DateString));
+                OnPropertyChanged(nameof(DateString));
             }
         }
 
@@ -34,7 +27,7 @@ namespace TeamDailyWork.ViewModels
             set
             {
                 _endDateString = value;
-                this.OnPropertyChanged(nameof(EndDateString));
+                OnPropertyChanged(nameof(EndDateString));
             }
         }
 
@@ -49,7 +42,7 @@ namespace TeamDailyWork.ViewModels
                 _weekDateTime = value;
                 DateString = _weekDateTime[0];
                 EndDateString = _weekDateTime[6];
-                this.OnPropertyChanged(nameof(WeekDateTime));
+                OnPropertyChanged(nameof(WeekDateTime));
             }
         }
 
@@ -61,7 +54,7 @@ namespace TeamDailyWork.ViewModels
             set
             {
                 _weekViewModel = value;
-                this.OnPropertyChanged(nameof(WeekViewModel));
+                OnPropertyChanged(nameof(WeekViewModel));
             }
         }
 
@@ -91,11 +84,11 @@ namespace TeamDailyWork.ViewModels
 
         public WeekViewPageViewModel()
         {
-            this.PreCommand=new DelegateCommand();
-            PreCommand.ExecuteAction+= new Action<object>(Pre);
+            PreCommand=new DelegateCommand();
+            PreCommand.ExecuteAction+= Pre;
 
-            this.NextCommand = new DelegateCommand();
-            NextCommand.ExecuteAction = new Action<object>(this.Next);
+            NextCommand = new DelegateCommand();
+            NextCommand.ExecuteAction = Next;
         }
 
 
@@ -141,7 +134,7 @@ namespace TeamDailyWork.ViewModels
                     dateList.Add(currentDay);
                 }
             }
-            this.WeekDateTime = dateList;
+            WeekDateTime = dateList;
             SetWeekViewModel();
 
         }

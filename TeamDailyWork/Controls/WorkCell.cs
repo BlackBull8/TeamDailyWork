@@ -90,7 +90,7 @@ namespace TeamDailyWork.Controls
         public WorkCell()
         {
             AllowDrop = true;//可在此绑定，也可在前台绑定
-            MouseDown += WorkCell_MouseDown; ;
+            MouseDown += WorkCell_MouseDown;
             Drop += WorkCell_Drop;
             DragOver += WorkCell_DragOver;
         }

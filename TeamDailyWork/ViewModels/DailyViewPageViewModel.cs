@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Threading;
-using System.Windows;
-using System.Windows.Input;
 using TeamDailyWork.Commands;
 using TeamDailyWork.Models;
 using TeamDailyWork.Services;
@@ -23,7 +20,7 @@ namespace TeamDailyWork.ViewModels
             set
             {
                 _dateString = value;
-                this.OnPropertyChanged(nameof(DateString));
+                OnPropertyChanged(nameof(DateString));
             }
         }
 
@@ -34,7 +31,7 @@ namespace TeamDailyWork.ViewModels
             set
             {
                 _workItems = value;
-                this.OnPropertyChanged(nameof(WorkItems));
+                OnPropertyChanged(nameof(WorkItems));
             }
         }
 
@@ -49,7 +46,7 @@ namespace TeamDailyWork.ViewModels
             set
             {
                 _timeCells = value;
-                this.OnPropertyChanged(nameof(TimeCells));
+                OnPropertyChanged(nameof(TimeCells));
             }
         }
 
@@ -85,16 +82,16 @@ namespace TeamDailyWork.ViewModels
         public DailyViewPageViewModel()
         {           
             MainWindowViewModel = MainWindowViewModel.GetInstance();         
-            this.PreCommand = new DelegateCommand();
-            PreCommand.ExecuteAction = new Action<object>(this.Pre);
-            this.NextCommand = new DelegateCommand();
-            NextCommand.ExecuteAction = new Action<object>(this.Next);
+            PreCommand = new DelegateCommand();
+            PreCommand.ExecuteAction = Pre;
+            NextCommand = new DelegateCommand();
+            NextCommand.ExecuteAction = Next;
         }
 
         public DailyViewPageViewModel(DateTime selectedDateTime) : this()
         {
             DateString = selectedDateTime;
-            ThreadPool.QueueUserWorkItem((item) => { LoadWorkItemInSelectedDate(DateString); });
+            ThreadPool.QueueUserWorkItem(item => { LoadWorkItemInSelectedDate(DateString); });
             SetTimeCells(DateString);
         }
 
@@ -112,50 +109,20 @@ namespace TeamDailyWork.ViewModels
 
 
         #region WorkItem的增删改查
+
         /// <summary>
         /// 添加WorkItem
         /// </summary>
         /// <param name="workItem"></param>
+        /// <param name="isSingle"></param>
         public void AddWorkItem(WorkItem workItem,bool isSingle)
         {
-            //if (isSingle)
-            //{
-            //    WorkItems.Add(workItem);
-            //}
-            //else
-            //{
-            //    for (DateTime dt = workItem.StartTime.Date; dt <= workItem.EndTime.Date;)
-            //    {
-            //        WorkItem item = new WorkItem();
-            //        item.Id = workItem.Id;
-            //        item.Content = workItem.Content;
-            //        item.Title = workItem.Title;
-            //        item.Type = workItem.Type;
-            //        if (dt == workItem.StartTime.Date)
-            //        {
-            //            item.StartTime = workItem.StartTime;
-            //            item.EndTime = workItem.StartTime.Date.AddDays(1);
-            //        }
-            //        else if (dt == workItem.EndTime.Date)
-            //        {
-            //            item.StartTime = workItem.EndTime.Date;
-            //            item.EndTime = workItem.EndTime;
-            //        }
-            //        else
-            //        {
-            //            item.StartTime = dt;
-            //            item.EndTime = dt.AddDays(1);
-            //        }
-                    
-            //        dt = dt.AddDays(1);
-            //    }
-            //}
             if (isSingle)
             {
                 WorkItems.Add(workItem);
             }
             //存储到数据库里面(Done)
-            ThreadPool.QueueUserWorkItem((item) => { _workItemService.Insert(workItem); });
+            ThreadPool.QueueUserWorkItem(item => { _workItemService.Insert(workItem); });
         }
 
         /// <summary>
@@ -164,7 +131,7 @@ namespace TeamDailyWork.ViewModels
         /// <param name="workItem"></param>
         public void UpdateWorkItem(WorkItem workItem)
         {
-            ThreadPool.QueueUserWorkItem((item) => { _workItemService.Update(workItem); });    
+            ThreadPool.QueueUserWorkItem(item => { _workItemService.Update(workItem); });    
         }
 
         /// <summary>
@@ -184,6 +151,7 @@ namespace TeamDailyWork.ViewModels
         /// 从DataTable返回WorkItems列表
         /// </summary>
         /// <param name="dt"></param>
+        /// <param name="isSingle"></param>
         /// <returns></returns>
         private ObservableCollection<WorkItem> DataTableToWorkItemList(DataTable dt,bool isSingle)
         {

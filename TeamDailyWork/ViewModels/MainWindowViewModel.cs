@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TeamDailyWork.Models;
 using TeamDailyWork.Services;
 
@@ -12,7 +9,7 @@ namespace TeamDailyWork.ViewModels
     public class MainWindowViewModel:NotificationObject
     {
         //new出给外部使用的对象
-        private static readonly MainWindowViewModel _mainWindowViewModel = new MainWindowViewModel();
+        private static readonly MainWindowViewModel SingleMainWindowViewModel = new MainWindowViewModel();
 
         #region 关于颜色与类型设置的属性
         private Dictionary<Guid, WorkClassification> _workClassification;
@@ -23,7 +20,7 @@ namespace TeamDailyWork.ViewModels
             set
             {
                 _workClassification = value;
-                this.OnPropertyChanged(nameof(WorkClassification));
+                OnPropertyChanged(nameof(WorkClassification));
             }
         }
 
@@ -35,7 +32,7 @@ namespace TeamDailyWork.ViewModels
             set
             {
                 _workClassificationList = value;
-                this.OnPropertyChanged(nameof(WorkClassificationList));
+                OnPropertyChanged(nameof(WorkClassificationList));
             }
         }
 
@@ -49,7 +46,7 @@ namespace TeamDailyWork.ViewModels
         /// <returns></returns>
         public static MainWindowViewModel GetInstance()
         {
-            return _mainWindowViewModel;
+            return SingleMainWindowViewModel;
         }
 
         /// <summary>

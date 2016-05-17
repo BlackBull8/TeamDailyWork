@@ -7,7 +7,6 @@
              xmlns:models="clr-namespace:TeamDailyWork.Models"
              xmlns:controls="clr-namespace:TeamDailyWork.Controls"
              xmlns:dataTemplateSelectors="clr-namespace:TeamDailyWork.DataTemplateSelectors"
-             xmlns:local="clr-namespace:TeamDailyWork.UserControls" 
              SnapsToDevicePixels="True" Foreground="WhiteSmoke" x:Name="DailyViewControl" Loaded="DailyViewControl_Loaded"
              mc:Ignorable="d" >
     <UserControl.Resources>

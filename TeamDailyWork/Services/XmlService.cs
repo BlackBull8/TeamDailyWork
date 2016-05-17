@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using TeamDailyWork.Models;
 
@@ -29,15 +25,15 @@ namespace TeamDailyWork.Services
         {
             try
             {
+                ObservableCollection<WorkClassification> resultList=new ObservableCollection<WorkClassification>();
                 //如果程序目录下存在WorkClassification.xml文件中，就从硬盘中读取
                 if (File.Exists(_basePath))
                 {
                     using (FileStream fs = File.OpenRead(_basePath))
                     {
                         XmlSerializer xs = new XmlSerializer(typeof (ObservableCollection<WorkClassification>));
-                        ObservableCollection<WorkClassification> resultList =
+                        resultList =
                             xs.Deserialize(fs) as ObservableCollection<WorkClassification>;
-                        return resultList;
                     }
                 }
                 else
@@ -46,17 +42,19 @@ namespace TeamDailyWork.Services
                     using (Stream sm = _asm.GetManifestResourceStream("TeamDailyWork.ColorsSetting.WorkClassification.xml"))
                     {
                         XmlSerializer xs = new XmlSerializer(typeof(ObservableCollection<WorkClassification>));
-                        ObservableCollection<WorkClassification> resultList =
-                            xs.Deserialize(sm) as ObservableCollection<WorkClassification>;
-                        return resultList;
+                        if (sm != null)
+                        {
+                            resultList =xs.Deserialize(sm) as ObservableCollection<WorkClassification>;
+                        }
                     }
                 }
+                return resultList;
             }
-            catch (FileNotFoundException er)
+            catch (FileNotFoundException)
             {
                 return null;
             }
-            catch (Exception err)
+            catch (Exception)
             {
                 return null;
             }

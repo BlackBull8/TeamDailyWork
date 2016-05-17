@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using TeamDailyWork.Controls;
 using TeamDailyWork.Models;
-using TeamDailyWork.Pages;
 using TeamDailyWork.ViewModels;
 
 namespace TeamDailyWork
@@ -35,9 +26,9 @@ namespace TeamDailyWork
         private bool _isCheck;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.DataContext = _mainWindowViewModel;
+            DataContext = _mainWindowViewModel;
 
-            this.ShowPageGrid.DataContext = new DailyViewPageViewModel(DateTime.Today);
+            ShowPageGrid.DataContext = new DailyViewPageViewModel(DateTime.Today);
             ColorsListOne.ItemsSource = new List<Color>()
             {
                 Color.FromRgb(221, 222, 224),
@@ -87,7 +78,7 @@ namespace TeamDailyWork
             tbResultOpacity.AutoReverse = true;
             Duration duration = new Duration(TimeSpan.FromMilliseconds(1500));
             tbResultOpacity.Duration = duration;
-            this.TbResult.BeginAnimation(TextBox.OpacityProperty, tbResultOpacity);
+            TbResult.BeginAnimation(OpacityProperty, tbResultOpacity);
 
             ColorsListOne.SelectedIndex = -1;
         }
@@ -150,14 +141,14 @@ namespace TeamDailyWork
                 {
                     PageContainer.NavigationUIVisibility = NavigationUIVisibility.Hidden;
                     PageContainer.Navigate(new Uri("Pages/DailyViewPage.xaml", UriKind.Relative));
-                    this.ShowPageGrid.DataContext = new DailyViewPageViewModel(DateTime.Today);
+                    ShowPageGrid.DataContext = new DailyViewPageViewModel(DateTime.Today);
                 }
             }
             else if (rb.Content.ToString() == "本周")
             {
                 PageContainer.NavigationUIVisibility = NavigationUIVisibility.Hidden;
                 PageContainer.Navigate(new Uri("Pages/WeekViewPage.xaml", UriKind.Relative));
-                this.ShowPageGrid.DataContext = new WeekViewPageViewModel(DateTime.Today);
+                ShowPageGrid.DataContext = new WeekViewPageViewModel(DateTime.Today);
                 _isCheck = true;
             }
         }

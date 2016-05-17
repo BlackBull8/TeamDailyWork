@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using TeamDailyWork.Annotations;
 
@@ -20,7 +16,7 @@ namespace TeamDailyWork.Models
             set
             {
                 _id = value;
-                this.OnPropertyChanged(nameof(Id));
+                OnPropertyChanged(nameof(Id));
             }
         }
 
@@ -30,9 +26,8 @@ namespace TeamDailyWork.Models
             get { return _color; }
             set
             {
-                if (value == null) return;
                 _color = value;
-                this.OnPropertyChanged(nameof(Color));
+                OnPropertyChanged(nameof(Color));
             }
         }
 
@@ -44,7 +39,7 @@ namespace TeamDailyWork.Models
             {
                 if (value == null) return;
                 _type = value;
-                this.OnPropertyChanged(nameof(Type));
+                OnPropertyChanged(nameof(Type));
             }
         }
 

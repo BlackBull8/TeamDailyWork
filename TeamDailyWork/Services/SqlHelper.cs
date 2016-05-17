@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TeamDailyWork.Services
 {
     public static class SqlHelper
     {
-        private readonly static string connStr = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
+        private readonly static string ConnStr = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
 
         public static int ExecuteNonQuery(string sql, CommandType cmdtype, params SqlParameter[] paras)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+            using (SqlConnection conn = new SqlConnection(ConnStr))
             {
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
@@ -32,7 +29,7 @@ namespace TeamDailyWork.Services
 
         public static object ExecuteScalar(string sql, CommandType cmdtype, params SqlParameter[] paras)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+            using (SqlConnection conn = new SqlConnection(ConnStr))
             {
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
@@ -49,7 +46,7 @@ namespace TeamDailyWork.Services
 
         public static SqlDataReader ExecuteReader(string sql, CommandType cmdtype, params SqlParameter[] paras)
         {
-            SqlConnection conn = new SqlConnection(connStr);
+            SqlConnection conn = new SqlConnection(ConnStr);
             using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
                 conn.Open();
@@ -65,7 +62,7 @@ namespace TeamDailyWork.Services
         public static DataTable ExecuteDataTable(string sql, CommandType cmdtype, params SqlParameter[] paras)
         {
             DataTable dt = new DataTable();
-            using (SqlDataAdapter sda = new SqlDataAdapter(sql, connStr))
+            using (SqlDataAdapter sda = new SqlDataAdapter(sql, ConnStr))
             {
                 sda.SelectCommand.CommandType = cmdtype;
                 if (paras != null)
@@ -79,7 +76,7 @@ namespace TeamDailyWork.Services
                 }
                 catch (Exception)
                 {
-
+                    throw new Exception("查询失败");
                 }
                
                 return dt;
@@ -89,7 +86,7 @@ namespace TeamDailyWork.Services
         //封装一个带事务的执行sql语句的方法
         public static void ExecuteNonQueryTran(List<SqlAndParameter> list)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+            using (SqlConnection conn = new SqlConnection(ConnStr))
             {
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
@@ -99,14 +96,14 @@ namespace TeamDailyWork.Services
                         cmd.Transaction = trans;
                         try
                         {
-                            foreach (var SqlObject in list)
+                            foreach (var sqlObject in list)
                             {
-                                cmd.CommandText = SqlObject.Sql;
-                                if (SqlObject.Parameters != null)
+                                cmd.CommandText = sqlObject.Sql;
+                                if (sqlObject.Parameters != null)
                                 {
-                                    cmd.Parameters.AddRange(SqlObject.Parameters);
+                                    cmd.Parameters.AddRange(sqlObject.Parameters);
                                 }
-                                cmd.CommandType = SqlObject.CmdType;
+                                cmd.CommandType = sqlObject.CmdType;
                                 cmd.ExecuteNonQuery();
                                 cmd.Parameters.Clear();
                             }

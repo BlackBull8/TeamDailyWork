@@ -30,7 +30,7 @@ namespace TeamDailyWork.UserControls
 
         private void DailyViewControl_Loaded(object sender, RoutedEventArgs e)
         {
-            _dailyViewPageViewModel = this.DataContext as DailyViewPageViewModel;
+            _dailyViewPageViewModel = DataContext as DailyViewPageViewModel;
             if (_dailyViewPageViewModel != null)
             {
                 if (DateUserControlDict.Keys.Contains(_dailyViewPageViewModel.DateString))
@@ -50,7 +50,7 @@ namespace TeamDailyWork.UserControls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void WorkCell_ReceivingTime(object sender, Controls.WorkCellGotTimeEventArgs e)
+        private void WorkCell_ReceivingTime(object sender, WorkCellGotTimeEventArgs e)
         {
             DateTime startDate = e.StartTime.Date;
             DateTime endDate = e.EndTime.Date;
@@ -79,7 +79,7 @@ namespace TeamDailyWork.UserControls
                             TranslateTransform translateTransformStart = new TranslateTransform(0,
                                 e.StartTime.TimeOfDay.TotalMinutes);
                             rectangleStart.RenderTransform = translateTransformStart;
-                            continue;
+                            //continue;
 
                         }
                         //对结束时间的Rectangle进行赋值
@@ -90,7 +90,7 @@ namespace TeamDailyWork.UserControls
                             rectangleEnd.Height = (e.EndTime - e.EndTime.Date).TotalMinutes;
                             TranslateTransform translateTransformEnd = new TranslateTransform(0, 0);
                             rectangleEnd.RenderTransform = translateTransformEnd;
-                            continue;
+                            //continue;
                         }
                         else
                         {
@@ -183,7 +183,6 @@ namespace TeamDailyWork.UserControls
         /// <param name="endTime"></param>
         private void SetCbTime(String startTime, String endTime)
         {
-            List<string> times = new List<string>();
             List<string> hours = new List<string>();
             for (int i = 0; i < 24; i++)
             {
@@ -199,13 +198,7 @@ namespace TeamDailyWork.UserControls
 
             List<string> minutes = new List<string>() { "00", "30" };
 
-            foreach (string hour in hours)
-            {
-                foreach (string minute in minutes)
-                {
-                    times.Add(hour + ":" + minute);
-                }
-            }
+            List<string> times = (from hour in hours from minute in minutes select hour + ":" + minute).ToList();
 
             CbStartTime.ItemsSource = times;
             CbEndTime.ItemsSource = times;
@@ -228,7 +221,7 @@ namespace TeamDailyWork.UserControls
                 tbResultOpacity.To = 0;
                 Duration duration = new Duration(TimeSpan.FromMilliseconds(5000));
                 tbResultOpacity.Duration = duration;
-                TbErrorMessage.BeginAnimation(TextBox.OpacityProperty, tbResultOpacity);
+                TbErrorMessage.BeginAnimation(OpacityProperty, tbResultOpacity);
 
             }
             else
@@ -275,13 +268,15 @@ namespace TeamDailyWork.UserControls
                 {
                     for (DateTime dt = workItem.StartTime.Date; dt <= workItem.EndTime.Date;)
                     {
-                        (DateUserControlDict[dt].DataContext as DailyViewPageViewModel)?.DeleteWorkItem(deleteWorkItem);
-                        for (int i = 0; i < (DateUserControlDict[dt].DataContext as DailyViewPageViewModel) ?.WorkItems.Count; i++)
+                        DailyViewPageViewModel dailyViewPageViewModel =
+                            DateUserControlDict[dt].DataContext as DailyViewPageViewModel;
+                        dailyViewPageViewModel?.DeleteWorkItem(deleteWorkItem);
+                        for (int i = 0; i < dailyViewPageViewModel?.WorkItems.Count; i++)
                         {
-                            if ((DateUserControlDict[dt].DataContext as DailyViewPageViewModel)?.WorkItems[i].Id ==
+                            if (dailyViewPageViewModel.WorkItems[i].Id ==
                                 workItem.Id)
                             {
-                                (DateUserControlDict[dt].DataContext as DailyViewPageViewModel)?.WorkItems.RemoveAt(i);
+                                dailyViewPageViewModel.WorkItems.RemoveAt(i);
                             }
                         }
                         dt = dt.AddDays(1);
@@ -295,7 +290,7 @@ namespace TeamDailyWork.UserControls
         #region Popup窗体关闭事件（把覆盖矩形的Visibility设为Hidden）
         private void AddWorkPopUpSingle_Closed(object sender, EventArgs e)
         {
-            this.BlockCover.Visibility = Visibility.Hidden;
+            BlockCover.Visibility = Visibility.Hidden;
         }
 
         private void AddWorkPopUpMulti_Closed(object sender, EventArgs e)
@@ -307,6 +302,11 @@ namespace TeamDailyWork.UserControls
         }
         #endregion
 
+        /// <summary>
+        /// 跨天事件按钮点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GenerateAsBtnMulti_Click(object sender, RoutedEventArgs e)
         {
             WorkItem workItem = new WorkItem(Guid.NewGuid(), _startTime, _endTime, _startTime.ToString("HH:mm") + "-" + _endTime.ToString("HH:mm"), TbContentShowMulti.Text, ((WorkClassification)TypeToColorListMulti.SelectedItem));
